@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import Layout from './components/Layout';
 
 // Auth Pages
 import Login from './pages/auth/Login';
@@ -59,56 +60,74 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             
-            {/* Protected Routes */}
+            {/* Protected Routes with Layout */}
             <Route path="/" element={
               <ProtectedRoute>
-                <Dashboard />
+                <Layout>
+                  <Dashboard />
+                </Layout>
               </ProtectedRoute>
             } />
             
             {/* Sales Module (Sales + Admin) */}
             <Route path="/sales/companies" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <CompaniesList />
+                <Layout>
+                  <CompaniesList />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/sales/companies/:id" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <CompanyDetail />
+                <Layout>
+                  <CompanyDetail />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/sales/orders" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <SalesOrdersList />
+                <Layout>
+                  <SalesOrdersList />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/sales/orders/:id" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <SalesOrderDetail />
+                <Layout>
+                  <SalesOrderDetail />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/sales/invoices" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <InvoicesList />
+                <Layout>
+                  <InvoicesList />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/sales/invoices/:id" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
-                <InvoiceDetail />
+                <Layout>
+                  <InvoiceDetail />
+                </Layout>
               </ProtectedRoute>
             } />
             
             {/* Management Dashboard (Admin only) */}
             <Route path="/management" element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <ManagementDashboard />
+                <Layout>
+                  <ManagementDashboard />
+                </Layout>
               </ProtectedRoute>
             } />
             
             {/* Settings (Admin only) */}
             <Route path="/settings" element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <Settings />
+                <Layout>
+                  <Settings />
+                </Layout>
               </ProtectedRoute>
             } />
             
