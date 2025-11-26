@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -97,6 +97,15 @@ export default function Login() {
             <Button type="submit" variant="contained" fullWidth size="large" disabled={loading} sx={{ mt: 3 }}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
+
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                Need to create an admin account?{' '}
+                <Link to="/register" style={{ color: '#1976d2', textDecoration: 'none' }}>
+                  Register here
+                </Link>
+              </Typography>
+            </Box>
           </form>
         </Paper>
       </Box>
