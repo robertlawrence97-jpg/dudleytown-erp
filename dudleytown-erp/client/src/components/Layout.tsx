@@ -74,19 +74,18 @@ export default function Layout({ children }: LayoutProps) {
 
   const drawer = (
     <div>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          Dudleytown ERP
+      <Toolbar sx={{ borderBottom: '1px solid #2a2a2a' }}>
+        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
+          The Crypt
         </Typography>
       </Toolbar>
-      <Divider />
       <List>
         <ListItem disablePadding>
           <ListItemButton
             selected={location.pathname === '/'}
             onClick={() => navigate('/')}
           >
-            <ListItemIcon>
+            <ListItemIcon sx={{ color: 'inherit' }}>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
@@ -98,7 +97,7 @@ export default function Layout({ children }: LayoutProps) {
           <>
             <ListItem disablePadding>
               <ListItemButton onClick={() => setSalesOpen(!salesOpen)}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: 'inherit' }}>
                   <ShoppingCartIcon />
                 </ListItemIcon>
                 <ListItemText primary="Sales" />
@@ -112,7 +111,7 @@ export default function Layout({ children }: LayoutProps) {
                   selected={location.pathname === '/sales/companies'}
                   onClick={() => navigate('/sales/companies')}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <PeopleIcon />
                   </ListItemIcon>
                   <ListItemText primary="Companies" />
@@ -122,7 +121,7 @@ export default function Layout({ children }: LayoutProps) {
                   selected={location.pathname === '/sales/orders'}
                   onClick={() => navigate('/sales/orders')}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <ShoppingCartIcon />
                   </ListItemIcon>
                   <ListItemText primary="Orders" />
@@ -132,7 +131,7 @@ export default function Layout({ children }: LayoutProps) {
                   selected={location.pathname === '/sales/invoices'}
                   onClick={() => navigate('/sales/invoices')}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <ReceiptIcon />
                   </ListItemIcon>
                   <ListItemText primary="Invoices" />
@@ -145,7 +144,7 @@ export default function Layout({ children }: LayoutProps) {
         {/* Inventory Module */}
         <ListItem disablePadding>
           <ListItemButton onClick={() => setInventoryOpen(!inventoryOpen)}>
-            <ListItemIcon>
+            <ListItemIcon sx={{ color: 'inherit' }}>
               <InventoryIcon />
             </ListItemIcon>
             <ListItemText primary="Inventory" />
@@ -159,7 +158,7 @@ export default function Layout({ children }: LayoutProps) {
               selected={location.pathname === '/inventory'}
               onClick={() => navigate('/inventory')}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: 'inherit' }}>
                 <InventoryIcon />
               </ListItemIcon>
               <ListItemText primary="Items" />
@@ -169,7 +168,7 @@ export default function Layout({ children }: LayoutProps) {
               selected={location.pathname === '/inventory/suppliers'}
               onClick={() => navigate('/inventory/suppliers')}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: 'inherit' }}>
                 <LocalShippingIcon />
               </ListItemIcon>
               <ListItemText primary="Suppliers" />
@@ -181,7 +180,7 @@ export default function Layout({ children }: LayoutProps) {
                   selected={location.pathname === '/inventory/purchase-orders'}
                   onClick={() => navigate('/inventory/purchase-orders')}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <ShoppingCartIcon />
                   </ListItemIcon>
                   <ListItemText primary="Purchase Orders" />
@@ -191,7 +190,7 @@ export default function Layout({ children }: LayoutProps) {
                   selected={location.pathname === '/inventory/receipts'}
                   onClick={() => navigate('/inventory/receipts')}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <ReceiptIcon />
                   </ListItemIcon>
                   <ListItemText primary="Receipts" />
@@ -206,7 +205,7 @@ export default function Layout({ children }: LayoutProps) {
           <>
             <ListItem disablePadding>
               <ListItemButton onClick={() => setProductionOpen(!productionOpen)}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: 'inherit' }}>
                   <FactoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Production" />
@@ -216,13 +215,13 @@ export default function Layout({ children }: LayoutProps) {
             <Collapse in={productionOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <ScienceIcon />
                   </ListItemIcon>
                   <ListItemText primary="Products" />
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>
                     <AssignmentIcon />
                   </ListItemIcon>
                   <ListItemText primary="Batches" />
@@ -239,7 +238,7 @@ export default function Layout({ children }: LayoutProps) {
               selected={location.pathname === '/management'}
               onClick={() => navigate('/management')}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: 'inherit' }}>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="Management" />
@@ -254,7 +253,7 @@ export default function Layout({ children }: LayoutProps) {
               selected={location.pathname === '/settings'}
               onClick={() => navigate('/settings')}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: 'inherit' }}>
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Settings" />
@@ -269,7 +268,12 @@ export default function Layout({ children }: LayoutProps) {
     <Box sx={{ display: 'flex' }}>
       <AppBar
         position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ 
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          bgcolor: '#000000',
+          borderBottom: '1px solid #2a2a2a'
+        }}
+        elevation={0}
       >
         <Toolbar>
           <IconButton
@@ -281,10 +285,10 @@ export default function Layout({ children }: LayoutProps) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {currentUser?.displayName}
+            {currentUser?.displayName || 'User'}
           </Typography>
           <IconButton onClick={handleProfileMenuOpen} sx={{ p: 0 }}>
-            <Avatar sx={{ bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ bgcolor: '#ffffff', color: '#000000', fontWeight: 700 }}>
               {currentUser?.displayName?.charAt(0) || 'U'}
             </Avatar>
           </IconButton>
@@ -313,7 +317,12 @@ export default function Layout({ children }: LayoutProps) {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth,
+              bgcolor: '#000000',
+              borderRight: '1px solid #2a2a2a'
+            },
           }}
         >
           {drawer}
@@ -322,7 +331,12 @@ export default function Layout({ children }: LayoutProps) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth,
+              bgcolor: '#000000',
+              borderRight: '1px solid #2a2a2a'
+            },
           }}
           open
         >
@@ -333,9 +347,10 @@ export default function Layout({ children }: LayoutProps) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: 8
+          mt: 8,
+          bgcolor: '#0a0a0a',
+          minHeight: '100vh'
         }}
       >
         {children}
