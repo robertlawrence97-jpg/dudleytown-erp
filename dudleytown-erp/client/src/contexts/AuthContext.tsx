@@ -72,22 +72,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('Auth state changed:', firebaseUser?.email);
       setFirebaseUser(firebaseUser);
       
       if (firebaseUser) {
-        // Fetch user data from Firestore
-        const userRef = doc(db, 'users', firebaseUser.uid);
-        const userSnap = await getDoc(userRef);
-        
-        if (userSnap.exists()) {
-          const userData = userSnap.data() as User;
-          setCurrentUser({
-            ...userData,
-            id: firebaseUser.uid
-          });
-        } else {
-          // User doesn't have a Firestore document yet (shouldn't happen in production)
-          console.error('User document not found');
+        try {
+          // Fetch user data from Firestore
+          const userRef = doc(db, 'users', firebaseUser.uid);
+          const userSnap = await getDoc(userRef);
+          
+          if (userSnap.exists()) {
+            const userData = userSnap.data() as User;
+            console.log('User data loaded:', userData);
+            setCurrentUser({
+              ...userData,
+              id: firebaseUser.uid,
+              // Ensure dates are Date objects
+              createdAt: userData.createdAt instanceof Date ? userData.createdAt : new Date(userData.createdAt),
+              lastLoginAt: userData.lastLoginAt instanceof Date ? userData.lastLoginAt : new Date(userData.lastLoginAt)
+            });
+          } else {
+            console.error('User document not found in Firestore');
+            setCurrentUser(null);
+          }
+        } catch (error) {
+          console.error('Error loading user document:', error);
           setCurrentUser(null);
         }
       } else {
