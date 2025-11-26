@@ -56,13 +56,24 @@ export default function Login() {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
-            Dudleytown Brewing ERP
+      <Box sx={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        bgcolor: '#0a0a0a'
+      }}>
+        <Paper elevation={0} sx={{ 
+          p: 4, 
+          width: '100%',
+          bgcolor: '#141414',
+          border: '1px solid #2a2a2a'
+        }}>
+          <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ fontWeight: 700, mb: 1 }}>
+            The Crypt
           </Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-            Sign in to continue
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 4 }}>
+            Dudleytown Brewing Co. ERP System
           </Typography>
 
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -94,7 +105,21 @@ export default function Login() {
               sx={{ mt: 1, mb: 2 }}
             />
 
-            <Button type="submit" variant="contained" fullWidth size="large" disabled={loading} sx={{ mt: 3 }}>
+            <Button 
+              type="submit" 
+              variant="contained" 
+              fullWidth 
+              size="large" 
+              disabled={loading} 
+              sx={{ 
+                mt: 3,
+                bgcolor: '#ffffff',
+                color: '#000000',
+                '&:hover': {
+                  bgcolor: '#f0f0f0'
+                }
+              }}
+            >
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
