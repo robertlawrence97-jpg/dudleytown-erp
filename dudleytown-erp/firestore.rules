@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+    
+    function isProduction() {
+      return isAuthenticated() && (getUserRole() == 'production' || getUserRole() == 'admin');
+    }
+    
+    function isSales() {
+      return isAuthenticated() && (getUserRole() == 'sales' || getUserRole() == 'admin');
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // ==================== SALES MODULE (Sales + Admin only) ====================
+    
+    match /companies/{companyId} {
+      allow read: if isSales();
+      allow create: if isSales();
+      allow update: if isSales();
+      allow delete: if isAdmin();
+    }
+    
+    match /salesOrders/{orderId} {
+      allow read: if isSales();
+      allow create: if isSales();
+      allow update: if isSales();
+      allow delete: if isAdmin();
+    }
+    
+    match /invoices/{invoiceId} {
+      allow read: if isSales();
+      allow create: if isSales();
+      allow update: if isSales();
+      allow delete: if isAdmin();
+    }
+    
+    // ==================== INVENTORY MODULE (All authenticated users can read, specific writes) ====================
+    
+    match /inventoryItems/{itemId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction() || isSales();
+    }
+    
+    match /suppliers/{supplierId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction();
+    }
+    
+    match /purchaseOrders/{poId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction();
+    }
+    
+    match /receipts/{receiptId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction();
+    }
+    
+    // ==================== PRODUCTION MODULE (Production + Admin only) ====================
+    
+    match /products/{productId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction();
+    }
+    
+    match /recipes/{recipeId} {
+      allow read: if isAuthenticated();
+      allow write: if isProduction();
+    }
+    
+    match /batches/{batchId} {
+      allow read: if isProduction();
+      allow create: if isProduction();
+      allow update: if isProduction();
+      allow delete: if isAdmin();
+    }
+    
+    match /batchTasks/{taskId} {
+      allow read: if isProduction();
+      allow create: if isProduction();
+      allow update: if isProduction();
+      allow delete: if isAdmin();
+    }
+    
+    match /fermentationLogs/{logId} {
+      allow read: if isProduction();
+      allow create: if isProduction();
+      allow update: if isProduction();
+      allow delete: if isAdmin();
+    }
+    
+    match /equipment/{equipmentId} {
+      allow read: if isProduction();
+      allow write: if isProduction();
+    }
+    
+    match /yeastPitches/{pitchId} {
+      allow read: if isProduction();
+      allow write: if isProduction();
+    }
+    
+    // ==================== NOTIFICATIONS (User-specific) ====================
+    
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // ==================== SETTINGS (Admin only) ====================
+    
+    match /settings/brewery {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
