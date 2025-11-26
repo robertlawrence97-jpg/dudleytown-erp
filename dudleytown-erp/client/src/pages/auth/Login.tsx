@@ -87,6 +87,16 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#2a2a2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#404040',
+                  },
+                },
+              }}
             />
             
             <TextField
@@ -97,6 +107,16 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#2a2a2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#404040',
+                  },
+                },
+              }}
             />
 
             <FormControlLabel
