@@ -7,6 +7,7 @@ import Layout from './components/Layout';
 
 // Auth Pages
 import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 import Unauthorized from './pages/auth/Unauthorized';
 
 // Dashboard
@@ -58,6 +59,7 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             
             {/* Protected Routes with Layout */}
