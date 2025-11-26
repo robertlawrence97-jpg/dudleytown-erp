@@ -13,13 +13,17 @@ const Dashboard: React.FC = () => {
         pb: 3
       }}>
         <img 
-          src="/dtb_logo.png" 
+          src={`${process.env.PUBLIC_URL}/dtb_logo.png`}
           alt="Dudleytown Brewing Co." 
           style={{ 
             maxWidth: '600px', 
             width: '100%',
             height: 'auto'
           }} 
+          onError={(e) => {
+            // Hide image if it fails to load
+            e.currentTarget.style.display = 'none';
+          }}
         />
       </Box>
 
