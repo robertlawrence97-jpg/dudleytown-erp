@@ -49,7 +49,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const auth = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
@@ -71,12 +71,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const handleSignOut = async () => {
-    await signOut();
+    if (auth?.signOut) {
+      await auth.signOut();
+    }
     handleMenuClose();
     navigate('/login');
   };
 
   const isSelected = (path: string) => location.pathname === path;
+
+  // Get user role - handle both possible structures
+  const userRole = auth?.currentUser?.role || (auth as any)?.user?.role || 'sales';
+  const userEmail = auth?.currentUser?.email || (auth as any)?.user?.email || '';
+  const userInitial = userEmail?.charAt(0).toUpperCase() || 'U';
 
   const drawer = (
     <div>
@@ -99,7 +106,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </ListItemButton>
 
         {/* Sales Section */}
-        {(user?.role === 'sales' || user?.role === 'admin') && (
+        {(userRole === 'sales' || userRole === 'admin') && (
           <>
             <ListItemButton onClick={() => setSalesOpen(!salesOpen)}>
               <ListItemIcon>
@@ -175,7 +182,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Allocations" />
             </ListItemButton>
-            {(user?.role === 'production' || user?.role === 'admin') && (
+            {(userRole === 'production' || userRole === 'admin') && (
               <>
                 <ListItemButton
                   sx={{ pl: 4 }}
@@ -213,7 +220,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </Collapse>
 
         {/* Production Section */}
-        {(user?.role === 'production' || user?.role === 'admin') && (
+        {(userRole === 'production' || userRole === 'admin') && (
           <>
             <ListItemButton onClick={() => setProductionOpen(!productionOpen)}>
               <ListItemIcon>
@@ -301,7 +308,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
 
         {/* Reports */}
-        {user?.role === 'admin' && (
+        {userRole === 'admin' && (
           <ListItemButton
             selected={isSelected('/reports')}
             onClick={() => navigate('/reports')}
@@ -316,7 +323,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Divider sx={{ my: 1 }} />
 
         {/* Settings */}
-        {user?.role === 'admin' && (
+        {userRole === 'admin' && (
           <ListItemButton
             selected={isSelected('/settings')}
             onClick={() => navigate('/settings')}
@@ -355,7 +362,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
           <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
             <Avatar sx={{ bgcolor: 'secondary.main' }}>
-              {user?.displayName?.charAt(0) || 'U'}
+              {userInitial}
             </Avatar>
           </IconButton>
           <Menu
@@ -364,7 +371,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             onClose={handleMenuClose}
           >
             <MenuItem disabled>
-              <Typography variant="body2">{user?.email}</Typography>
+              <Typography variant="body2">{userEmail}</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
