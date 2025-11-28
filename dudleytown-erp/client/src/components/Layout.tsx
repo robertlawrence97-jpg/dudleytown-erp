@@ -1,37 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
+  AppBar,
   Box,
   Drawer,
-  AppBar,
-  Toolbar,
-  List,
-  Typography,
-  Divider,
   IconButton,
-  ListItem,
+  List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Toolbar,
+  Typography,
   Avatar,
   Menu,
   MenuItem,
-  Collapse
+  Collapse,
+  Divider,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import FactoryIcon from '@mui/icons-material/Factory';
-import ScienceIcon from '@mui/icons-material/Science';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import {
+  Menu as MenuIcon,
+  Dashboard as DashboardIcon,
+  Business as BusinessIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Receipt as ReceiptIcon,
+  Inventory as InventoryIcon,
+  LocalShipping as LocalShippingIcon,
+  Description as DescriptionIcon,
+  Factory as FactoryIcon,
+  Science as ScienceIcon,
+  BubbleChart as BubbleChartIcon,
+  Assignment as AssignmentIcon,
+  Build as BuildIcon,
+  Biotech as BiotechIcon,
+  Timeline as TimelineIcon,
+  BarChart as BarChartIcon,
+  Settings as SettingsIcon,
+  ExpandLess,
+  ExpandMore,
+} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 const drawerWidth = 260;
@@ -40,98 +46,96 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [salesOpen, setSalesOpen] = useState(true);
-  const [inventoryOpen, setInventoryOpen] = useState(false);
-  const [productionOpen, setProductionOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  
-  const { currentUser, signOut } = useAuth();
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const isSalesUser = currentUser?.role === 'sales' || currentUser?.role === 'admin';
-  const isProductionUser = currentUser?.role === 'production' || currentUser?.role === 'admin';
+  const { user, signOut } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  
+  // Collapse states
+  const [salesOpen, setSalesOpen] = useState(true);
+  const [inventoryOpen, setInventoryOpen] = useState(true);
+  const [productionOpen, setProductionOpen] = useState(true);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleProfileMenuClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
   const handleSignOut = async () => {
-    handleProfileMenuClose();
     await signOut();
+    handleMenuClose();
     navigate('/login');
   };
 
+  const isSelected = (path: string) => location.pathname === path;
+
   const drawer = (
     <div>
-      <Toolbar sx={{ borderBottom: '1px solid #2a2a2a' }}>
+      <Toolbar sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.12)' }}>
         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
           The Crypt
         </Typography>
       </Toolbar>
+      
       <List>
-        <ListItem disablePadding>
-          <ListItemButton
-            selected={location.pathname === '/'}
-            onClick={() => navigate('/')}
-          >
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItemButton>
-        </ListItem>
+        {/* Dashboard */}
+        <ListItemButton
+          selected={isSelected('/')}
+          onClick={() => navigate('/')}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
 
-        {/* Sales Module */}
-        {isSalesUser && (
+        {/* Sales Section */}
+        {(user?.role === 'sales' || user?.role === 'admin') && (
           <>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => setSalesOpen(!salesOpen)}>
-                <ListItemIcon sx={{ color: 'inherit' }}>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Sales" />
-                {salesOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-            </ListItem>
+            <ListItemButton onClick={() => setSalesOpen(!salesOpen)}>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sales" />
+              {salesOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
             <Collapse in={salesOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton
                   sx={{ pl: 4 }}
-                  selected={location.pathname === '/sales/companies'}
+                  selected={isSelected('/sales/companies')}
                   onClick={() => navigate('/sales/companies')}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
-                    <PeopleIcon />
+                  <ListItemIcon>
+                    <BusinessIcon />
                   </ListItemIcon>
                   <ListItemText primary="Companies" />
                 </ListItemButton>
                 <ListItemButton
                   sx={{ pl: 4 }}
-                  selected={location.pathname === '/sales/orders'}
+                  selected={isSelected('/sales/orders')}
                   onClick={() => navigate('/sales/orders')}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
+                  <ListItemIcon>
                     <ShoppingCartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Orders" />
+                  <ListItemText primary="Sales Orders" />
                 </ListItemButton>
                 <ListItemButton
                   sx={{ pl: 4 }}
-                  selected={location.pathname === '/sales/invoices'}
+                  selected={isSelected('/sales/invoices')}
                   onClick={() => navigate('/sales/invoices')}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
+                  <ListItemIcon>
                     <ReceiptIcon />
                   </ListItemIcon>
                   <ListItemText primary="Invoices" />
@@ -141,56 +145,64 @@ export default function Layout({ children }: LayoutProps) {
           </>
         )}
 
-        {/* Inventory Module */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setInventoryOpen(!inventoryOpen)}>
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              <InventoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Inventory" />
-            {inventoryOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
+        {/* Inventory Section */}
+        <ListItemButton onClick={() => setInventoryOpen(!inventoryOpen)}>
+          <ListItemIcon>
+            <InventoryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Inventory" />
+          {inventoryOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
         <Collapse in={inventoryOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
               sx={{ pl: 4 }}
-              selected={location.pathname === '/inventory'}
+              selected={isSelected('/inventory')}
               onClick={() => navigate('/inventory')}
             >
-              <ListItemIcon sx={{ color: 'inherit' }}>
+              <ListItemIcon>
                 <InventoryIcon />
               </ListItemIcon>
               <ListItemText primary="Items" />
             </ListItemButton>
             <ListItemButton
               sx={{ pl: 4 }}
-              selected={location.pathname === '/inventory/suppliers'}
-              onClick={() => navigate('/inventory/suppliers')}
+              selected={isSelected('/inventory/allocations')}
+              onClick={() => navigate('/inventory/allocations')}
             >
-              <ListItemIcon sx={{ color: 'inherit' }}>
-                <LocalShippingIcon />
+              <ListItemIcon>
+                <TimelineIcon />
               </ListItemIcon>
-              <ListItemText primary="Suppliers" />
+              <ListItemText primary="Allocations" />
             </ListItemButton>
-            {isProductionUser && (
+            {(user?.role === 'production' || user?.role === 'admin') && (
               <>
                 <ListItemButton
                   sx={{ pl: 4 }}
-                  selected={location.pathname === '/inventory/purchase-orders'}
+                  selected={isSelected('/inventory/suppliers')}
+                  onClick={() => navigate('/inventory/suppliers')}
+                >
+                  <ListItemIcon>
+                    <LocalShippingIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Suppliers" />
+                </ListItemButton>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/inventory/purchase-orders')}
                   onClick={() => navigate('/inventory/purchase-orders')}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
-                    <ShoppingCartIcon />
+                  <ListItemIcon>
+                    <DescriptionIcon />
                   </ListItemIcon>
                   <ListItemText primary="Purchase Orders" />
                 </ListItemButton>
                 <ListItemButton
                   sx={{ pl: 4 }}
-                  selected={location.pathname === '/inventory/receipts'}
+                  selected={isSelected('/inventory/receipts')}
                   onClick={() => navigate('/inventory/receipts')}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
+                  <ListItemIcon>
                     <ReceiptIcon />
                   </ListItemIcon>
                   <ListItemText primary="Receipts" />
@@ -200,65 +212,120 @@ export default function Layout({ children }: LayoutProps) {
           </List>
         </Collapse>
 
-        {/* Production Module */}
-        {isProductionUser && (
+        {/* Production Section */}
+        {(user?.role === 'production' || user?.role === 'admin') && (
           <>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => setProductionOpen(!productionOpen)}>
-                <ListItemIcon sx={{ color: 'inherit' }}>
-                  <FactoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="Production" />
-                {productionOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-            </ListItem>
+            <ListItemButton onClick={() => setProductionOpen(!productionOpen)}>
+              <ListItemIcon>
+                <FactoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Production" />
+              {productionOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
             <Collapse in={productionOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon sx={{ color: 'inherit' }}>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/products')}
+                  onClick={() => navigate('/production/products')}
+                >
+                  <ListItemIcon>
                     <ScienceIcon />
                   </ListItemIcon>
                   <ListItemText primary="Products" />
                 </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon sx={{ color: 'inherit' }}>
-                    <AssignmentIcon />
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/recipes')}
+                  onClick={() => navigate('/production/recipes')}
+                >
+                  <ListItemIcon>
+                    <DescriptionIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Recipes" />
+                </ListItemButton>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/batches')}
+                  onClick={() => navigate('/production/batches')}
+                >
+                  <ListItemIcon>
+                    <BubbleChartIcon />
                   </ListItemIcon>
                   <ListItemText primary="Batches" />
                 </ListItemButton>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/tasks')}
+                  onClick={() => navigate('/production/tasks')}
+                >
+                  <ListItemIcon>
+                    <AssignmentIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Tasks" />
+                </ListItemButton>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/equipment')}
+                  onClick={() => navigate('/production/equipment')}
+                >
+                  <ListItemIcon>
+                    <BuildIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Equipment" />
+                </ListItemButton>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={isSelected('/production/yeast')}
+                  onClick={() => navigate('/production/yeast')}
+                >
+                  <ListItemIcon>
+                    <BiotechIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Yeast" />
+                </ListItemButton>
               </List>
             </Collapse>
+
+            {/* Forecasting */}
+            <ListItemButton
+              selected={isSelected('/forecasting')}
+              onClick={() => navigate('/forecasting')}
+            >
+              <ListItemIcon>
+                <TimelineIcon />
+              </ListItemIcon>
+              <ListItemText primary="Forecasting" />
+            </ListItemButton>
           </>
         )}
 
-        {/* Management Dashboard (Admin only) */}
-        {currentUser?.role === 'admin' && (
-          <ListItem disablePadding>
-            <ListItemButton
-              selected={location.pathname === '/management'}
-              onClick={() => navigate('/management')}
-            >
-              <ListItemIcon sx={{ color: 'inherit' }}>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Management" />
-            </ListItemButton>
-          </ListItem>
+        {/* Reports */}
+        {user?.role === 'admin' && (
+          <ListItemButton
+            selected={isSelected('/reports')}
+            onClick={() => navigate('/reports')}
+          >
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Reports" />
+          </ListItemButton>
         )}
 
-        {/* Settings (Admin only) */}
-        {currentUser?.role === 'admin' && (
-          <ListItem disablePadding>
-            <ListItemButton
-              selected={location.pathname === '/settings'}
-              onClick={() => navigate('/settings')}
-            >
-              <ListItemIcon sx={{ color: 'inherit' }}>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItemButton>
-          </ListItem>
+        <Divider sx={{ my: 1 }} />
+
+        {/* Settings */}
+        {user?.role === 'admin' && (
+          <ListItemButton
+            selected={isSelected('/settings')}
+            onClick={() => navigate('/settings')}
+          >
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </ListItemButton>
         )}
       </List>
     </div>
@@ -268,16 +335,15 @@ export default function Layout({ children }: LayoutProps) {
     <Box sx={{ display: 'flex' }}>
       <AppBar
         position="fixed"
-        sx={{ 
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          bgcolor: '#000000',
-          borderBottom: '1px solid #2a2a2a'
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
         }}
-        elevation={0}
       >
         <Toolbar>
           <IconButton
             color="inherit"
+            aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
@@ -285,27 +351,27 @@ export default function Layout({ children }: LayoutProps) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {currentUser?.displayName || 'User'}
+            {/* Page title can be added here */}
           </Typography>
-          <IconButton onClick={handleProfileMenuOpen} sx={{ p: 0 }}>
-            <Avatar sx={{ bgcolor: '#ffffff', color: '#000000', fontWeight: 700 }}>
-              {currentUser?.displayName?.charAt(0) || 'U'}
+          <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
+            <Avatar sx={{ bgcolor: 'secondary.main' }}>
+              {user?.displayName?.charAt(0) || 'U'}
             </Avatar>
           </IconButton>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={handleProfileMenuClose}
+            onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleSignOut}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Sign Out</ListItemText>
+            <MenuItem disabled>
+              <Typography variant="body2">{user?.email}</Typography>
             </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
+      
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -314,15 +380,12 @@ export default function Layout({ children }: LayoutProps) {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
+          ModalProps={{
+            keepMounted: true,
+          }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              bgcolor: '#000000',
-              borderRight: '1px solid #2a2a2a'
-            },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
           {drawer}
@@ -331,30 +394,26 @@ export default function Layout({ children }: LayoutProps) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              bgcolor: '#000000',
-              borderRight: '1px solid #2a2a2a'
-            },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
           open
         >
           {drawer}
         </Drawer>
       </Box>
+      
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: 8,
-          bgcolor: '#000000',
-          minHeight: '100vh'
         }}
       >
         {children}
       </Box>
     </Box>
   );
-}
+};
+
+export default Layout;
