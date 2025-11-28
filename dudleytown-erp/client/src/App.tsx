@@ -28,13 +28,26 @@ import Settings from './pages/settings/Settings';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
-      main: '#1976d2',
+      main: '#ffffff',
+      light: '#f5f5f5',
+      dark: '#cccccc',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#ff4444',
+      light: '#ff6666',
+      dark: '#cc0000',
     },
+    background: {
+      default: '#000000',
+      paper: '#e0e0e0',
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#666666',
+    },
+    divider: '#2a2a2a',
   },
   typography: {
     fontFamily: [
@@ -46,6 +59,88 @@ const theme = createTheme({
       'Arial',
       'sans-serif',
     ].join(','),
+    h4: {
+      fontWeight: 700,
+      letterSpacing: '-0.02em',
+    },
+    h6: {
+      fontWeight: 600,
+    },
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#000000',
+          borderBottom: '1px solid #2a2a2a',
+        },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#000000',
+          borderRight: '1px solid #2a2a2a',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          backgroundColor: '#e0e0e0',
+          borderRadius: 4,
+          border: '1px solid #2a2a2a',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontWeight: 600,
+          borderRadius: 4,
+        },
+        contained: {
+          backgroundColor: '#ffffff',
+          color: '#000000',
+          '&:hover': {
+            backgroundColor: '#f0f0f0',
+          },
+        },
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          color: '#ffffff',
+          '&.Mui-selected': {
+            backgroundColor: '#1a1a1a',
+            borderLeft: '3px solid #ffffff',
+            '&:hover': {
+              backgroundColor: '#222222',
+            },
+          },
+          '&:hover': {
+            backgroundColor: '#1a1a1a',
+          },
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: '#ffffff',
+        },
+      },
+    },
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          color: '#ffffff',
+        },
+      },
+    },
   },
 });
 
