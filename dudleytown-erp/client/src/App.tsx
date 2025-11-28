@@ -20,34 +20,52 @@ import SalesOrderDetail from './pages/sales/SalesOrderDetail';
 import InvoicesList from './pages/sales/InvoicesList';
 import InvoiceDetail from './pages/sales/InvoiceDetail';
 
-// Management Dashboard
-import ManagementDashboard from './pages/management/ManagementDashboard';
+// Inventory Module
+import InventoryItemsList from './pages/inventory/InventoryItemsList';
+import InventoryItemDetail from './pages/inventory/InventoryItemDetail';
+import SuppliersList from './pages/inventory/SuppliersList';
+import SupplierDetail from './pages/inventory/SupplierDetail';
+import PurchaseOrdersList from './pages/inventory/PurchaseOrdersList';
+import PurchaseOrderDetail from './pages/inventory/PurchaseOrderDetail';
+import ReceiptsList from './pages/inventory/ReceiptsList';
+import ReceiptDetail from './pages/inventory/ReceiptDetail';
+import AllocationsView from './pages/inventory/AllocationsView';
 
-// Settings
+// Production Module
+import ProductsList from './pages/production/ProductsList';
+import ProductDetail from './pages/production/ProductDetail';
+import RecipesList from './pages/production/RecipesList';
+import RecipeDetail from './pages/production/RecipeDetail';
+import BatchesList from './pages/production/BatchesList';
+import BatchDetail from './pages/production/BatchDetail';
+import TasksList from './pages/production/TasksList';
+import EquipmentList from './pages/production/EquipmentList';
+import YeastManagement from './pages/production/YeastManagement';
+
+// Forecasting Module
+import ForecastingView from './pages/forecasting/ForecastingView';
+
+// Reporting Module
+import ReportsDashboard from './pages/reports/ReportsDashboard';
+import COGSReport from './pages/reports/COGSReport';
+
+// Management & Settings
+import ManagementDashboard from './pages/management/ManagementDashboard';
 import Settings from './pages/settings/Settings';
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#ffffff',
-      light: '#f5f5f5',
-      dark: '#cccccc',
+      main: '#2196f3',
     },
     secondary: {
-      main: '#ff4444',
-      light: '#ff6666',
-      dark: '#cc0000',
+      main: '#f50057',
     },
     background: {
-      default: '#000000',
-      paper: '#e0e0e0',
+      default: '#121212',
+      paper: '#1e1e1e',
     },
-    text: {
-      primary: '#000000',
-      secondary: '#666666',
-    },
-    divider: '#2a2a2a',
   },
   typography: {
     fontFamily: [
@@ -59,88 +77,6 @@ const theme = createTheme({
       'Arial',
       'sans-serif',
     ].join(','),
-    h4: {
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
-    },
-    h6: {
-      fontWeight: 600,
-    },
-  },
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#000000',
-          borderBottom: '1px solid #2a2a2a',
-        },
-      },
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#000000',
-          borderRight: '1px solid #2a2a2a',
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-          backgroundColor: '#e0e0e0',
-          borderRadius: 4,
-          border: '1px solid #2a2a2a',
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 600,
-          borderRadius: 4,
-        },
-        contained: {
-          backgroundColor: '#ffffff',
-          color: '#000000',
-          '&:hover': {
-            backgroundColor: '#f0f0f0',
-          },
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          color: '#ffffff',
-          '&.Mui-selected': {
-            backgroundColor: '#1a1a1a',
-            borderLeft: '3px solid #ffffff',
-            '&:hover': {
-              backgroundColor: '#222222',
-            },
-          },
-          '&:hover': {
-            backgroundColor: '#1a1a1a',
-          },
-        },
-      },
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          color: '#ffffff',
-        },
-      },
-    },
-    MuiListItemText: {
-      styleOverrides: {
-        primary: {
-          color: '#ffffff',
-        },
-      },
-    },
   },
 });
 
@@ -164,7 +100,7 @@ function App() {
               </ProtectedRoute>
             } />
             
-            {/* Sales Module (Sales + Admin) */}
+            {/* ========== SALES MODULE ========== */}
             <Route path="/sales/companies" element={
               <ProtectedRoute allowedRoles={['sales', 'admin']}>
                 <Layout>
@@ -208,7 +144,162 @@ function App() {
               </ProtectedRoute>
             } />
             
-            {/* Management Dashboard (Admin only) */}
+            {/* ========== INVENTORY MODULE ========== */}
+            <Route path="/inventory" element={
+              <ProtectedRoute>
+                <Layout>
+                  <InventoryItemsList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/items/:id" element={
+              <ProtectedRoute>
+                <Layout>
+                  <InventoryItemDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/allocations" element={
+              <ProtectedRoute>
+                <Layout>
+                  <AllocationsView />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/suppliers" element={
+              <ProtectedRoute>
+                <Layout>
+                  <SuppliersList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/suppliers/:id" element={
+              <ProtectedRoute>
+                <Layout>
+                  <SupplierDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/purchase-orders" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <PurchaseOrdersList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/purchase-orders/:id" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <PurchaseOrderDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/receipts" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <ReceiptsList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/inventory/receipts/:id" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <ReceiptDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            {/* ========== PRODUCTION MODULE ========== */}
+            <Route path="/production/products" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <ProductsList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/products/:id" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <ProductDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/recipes" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <RecipesList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/recipes/:id" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <RecipeDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/batches" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <BatchesList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/batches/:id" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <BatchDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/tasks" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <TasksList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/equipment" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <EquipmentList />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/production/yeast" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <YeastManagement />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            {/* ========== FORECASTING MODULE ========== */}
+            <Route path="/forecasting" element={
+              <ProtectedRoute allowedRoles={['production', 'admin']}>
+                <Layout>
+                  <ForecastingView />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            {/* ========== REPORTING MODULE ========== */}
+            <Route path="/reports" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <ReportsDashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/reports/cogs" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <COGSReport />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            {/* ========== MANAGEMENT & SETTINGS ========== */}
             <Route path="/management" element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <Layout>
@@ -216,8 +307,6 @@ function App() {
                 </Layout>
               </ProtectedRoute>
             } />
-            
-            {/* Settings (Admin only) */}
             <Route path="/settings" element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <Layout>
