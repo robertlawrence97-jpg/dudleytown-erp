@@ -44,7 +44,7 @@ import {
 } from '@mui/icons-material';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { db, auth } from '../../config/firebase';
+import { db, auth } from '../../firebase/config';
 
 interface User {
   id: string;
