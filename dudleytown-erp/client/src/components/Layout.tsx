@@ -349,7 +349,7 @@ export default function Layout({ children }: LayoutProps) {
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: 8,
-          bgcolor: '#0a0a0a',
+          bgcolor: '#000000',
           minHeight: '100vh'
         }}
       >
