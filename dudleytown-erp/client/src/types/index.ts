@@ -216,6 +216,10 @@ export interface InventoryItem {
     }
   };
   
+  // Allocation Settings
+  allocationEnabled: boolean;
+  preOrderEnabled: boolean;
+  
   // Settings
   packageHoldDays?: number;
   depositItem?: string;
@@ -355,7 +359,7 @@ export interface Product {
   name: string;
   abbreviation?: string;
   
-  // Classification (for beer)
+  // Classification
   productClass: 'beer' | 'merchandise' | 'other';
   type?: string; // Ale, Lager, etc.
   style?: string; // IPA, Stout, etc.
@@ -394,7 +398,7 @@ export interface Recipe {
   name: string;
   productId: string;
   productName: string;
-  batchSize: number; // in barrels
+  batchSize: number;
   batchSizeUOM: string;
   
   // Recipe Details
@@ -427,7 +431,7 @@ export interface RecipeIngredient {
   quantity: number;
   uom: string;
   stage: 'mash' | 'boil' | 'fermentation' | 'conditioning' | 'packaging';
-  timing?: string; // e.g., "60 min", "flameout", "day 3"
+  timing?: string;
   notes?: string;
 }
 
@@ -437,7 +441,7 @@ export interface RecipeStep {
   stage: 'brew' | 'fermentation' | 'conditioning' | 'packaging';
   name: string;
   description: string;
-  duration?: number; // in minutes or days
+  duration?: number;
   temperature?: number;
   notes?: string;
 }
@@ -453,11 +457,11 @@ export interface Batch {
   // Production Details
   startDate: Date;
   endDate?: Date;
-  batchSize: number; // planned
+  batchSize: number;
   batchSizeUOM: string;
   turnCount: number;
   
-  // Equipment Assignments
+  // Equipment
   brewhouseId?: string;
   fermenterId?: string;
   fermenterName?: string;
@@ -466,7 +470,7 @@ export interface Batch {
   servingTankId?: string;
   servingTankName?: string;
   
-  // Production Tracking
+  // Turns
   turns: BatchTurn[];
   
   // Status
@@ -513,7 +517,7 @@ export interface BatchTurn {
   // Status
   status: 'planned' | 'in-progress' | 'complete';
   
-  // Fermentation Logs
+  // Logs
   fermentationLogs: FermentationLog[];
 }
 
@@ -558,7 +562,7 @@ export interface BatchTask {
   
   // Scheduling
   isRecurring: boolean;
-  recurringInterval?: string; // e.g., "daily", "every 8 hours"
+  recurringInterval?: string;
   
   // Notifications
   notificationSent: boolean;
@@ -605,7 +609,7 @@ export interface YeastPitch {
   strain: string;
   type: 'ale' | 'lager' | 'wild' | 'other';
   generation: number;
-  lineage?: string; // parent pitch ID
+  lineage?: string;
   
   // Status
   status: 'active' | 'harvested' | 'pitched' | 'disposed';
@@ -620,8 +624,8 @@ export interface YeastPitch {
   location: string;
   
   // Viability
-  viability?: number; // percentage
-  cellCount?: number; // billion cells
+  viability?: number;
+  cellCount?: number;
   
   // Metadata
   createdAt: Date;
@@ -629,31 +633,58 @@ export interface YeastPitch {
   notes?: string;
 }
 
-// ==================== NOTIFICATIONS ====================
+// ==================== FORECASTING ====================
 
-export interface Notification {
-  id: string;
-  userId: string;
+export interface ForecastPeriod {
+  month: string; // YYYY-MM
+  year: number;
+  monthIndex: number;
+}
+
+export interface ForecastItem {
+  itemId: string;
+  itemName: string;
+  itemClass: ItemClass;
+  productId?: string;
+  productName?: string;
+  siteId: string;
   
-  // Notification Details
-  type: 'task' | 'reorder' | 'batch' | 'order' | 'system';
-  title: string;
-  message: string;
-  
-  // Related Entity
-  entityType?: 'task' | 'batch' | 'order' | 'item' | 'po';
-  entityId?: string;
-  
-  // Status
-  isRead: boolean;
-  readAt?: Date;
-  
-  // Scheduling
-  scheduledFor?: Date;
-  sentAt?: Date;
-  
-  // Metadata
-  createdAt: Date;
+  // By Month
+  forecast: {
+    [monthKey: string]: { // 'YYYY-MM'
+      begin: number;
+      add: number;
+      remove: number;
+      end: number;
+    }
+  };
+}
+
+// ==================== REPORTING ====================
+
+export interface COGSReportRow {
+  itemClass: ItemClass;
+  itemName: string;
+  qtySold: number;
+  salesReturns: number;
+  netQty: number;
+  adjQty: number;
+  grossSales: number;
+  discounts: number;
+  salesReturnsValue: number;
+  netSales: number;
+  cogs: number;
+  grossProfit: number;
+  grossProfitMargin: number;
+  pctOfSales: number;
+  pctOfProfit: number;
+  unitNetSales: number;
+  unitCOGS: number;
+  unitGrossProfit: number;
+  netVolume: number;
+  grossProfitPerVolume: number;
+  netVolumeCE: number;
+  grossProfitPerCE: number;
 }
 
 // ==================== SETTINGS ====================
@@ -680,7 +711,7 @@ export interface BrewerySettings {
   itemReorderNotificationBy?: string;
   kegReturnLocation?: string;
   
-  // QuickBooks Integration (Framework)
+  // QuickBooks Integration
   qboEnabled: boolean;
   qboCompanyId?: string;
   qboAccessToken?: string;
@@ -690,4 +721,31 @@ export interface BrewerySettings {
   // Metadata
   updatedAt: Date;
   updatedBy: string;
+}
+
+// ==================== NOTIFICATIONS ====================
+
+export interface Notification {
+  id: string;
+  userId: string;
+  
+  // Details
+  type: 'task' | 'reorder' | 'batch' | 'order' | 'system';
+  title: string;
+  message: string;
+  
+  // Related Entity
+  entityType?: 'task' | 'batch' | 'order' | 'item' | 'po';
+  entityId?: string;
+  
+  // Status
+  isRead: boolean;
+  readAt?: Date;
+  
+  // Scheduling
+  scheduledFor?: Date;
+  sentAt?: Date;
+  
+  // Metadata
+  createdAt: Date;
 }
