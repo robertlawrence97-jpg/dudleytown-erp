@@ -61,18 +61,18 @@ export default function Login() {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        bgcolor: '#0a0a0a'
+        bgcolor: '#000000'
       }}>
         <Paper elevation={0} sx={{ 
           p: 4, 
           width: '100%',
-          bgcolor: '#141414',
+          bgcolor: '#e0e0e0',
           border: '1px solid #2a2a2a'
         }}>
-          <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ fontWeight: 700, mb: 1 }}>
+          <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ fontWeight: 700, mb: 1, color: '#000000' }}>
             The Crypt
           </Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 4 }}>
+          <Typography variant="body2" sx={{ color: '#666666', textAlign: 'center', mb: 4 }}>
             Dudleytown Brewing Co. ERP System
           </Typography>
 
@@ -89,6 +89,7 @@ export default function Login() {
               required
               sx={{
                 '& .MuiOutlinedInput-root': {
+                  bgcolor: '#ffffff',
                   '& fieldset': {
                     borderColor: '#2a2a2a',
                   },
@@ -109,6 +110,7 @@ export default function Login() {
               required
               sx={{
                 '& .MuiOutlinedInput-root': {
+                  bgcolor: '#ffffff',
                   '& fieldset': {
                     borderColor: '#2a2a2a',
                   },
@@ -133,10 +135,10 @@ export default function Login() {
               disabled={loading} 
               sx={{ 
                 mt: 3,
-                bgcolor: '#ffffff',
-                color: '#000000',
+                bgcolor: '#000000',
+                color: '#ffffff',
                 '&:hover': {
-                  bgcolor: '#f0f0f0'
+                  bgcolor: '#1a1a1a'
                 }
               }}
             >
